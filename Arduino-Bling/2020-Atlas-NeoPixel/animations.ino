@@ -172,3 +172,112 @@ void flash(unsigned long timeInterval, uint32_t color, uint8_t brightness)
   delay(timeInterval);
   setAllPixelsOff();
 }
+
+/*
+ * Spartronics blue and yellow "Cogs"
+ */
+
+// Number of LEDs per "cog" on the animation
+#define COG_SIZE 5
+
+// A counter from 0 to (2*COG_SIZE)-1
+uint8_t cogOffset=0;
+
+/* Spartronics cogs initialization */
+void cogs_init(rgbColor color1, rgbColor color2)
+{
+  uint8_t led=0;
+
+  while (led < NUM_LEDS)
+  {
+    for (uint8_t i=0; (i<COG_SIZE) && (led<NUM_LEDS); i++)
+    {
+      setPixel(led++, color1.color);
+    }
+    for (uint8_t i=0; (i<COG_SIZE) && (led<NUM_LEDS); i++)
+    {
+      setPixel(led++, color2.color);
+    }
+  }
+  showPixels();
+}
+
+/* Set one pixel of each "cycle" to the specified color, starting at offset */
+void setFromOffset(uint8_t offset, rgbColor color)
+{
+  for (uint8_t led=offset; (led<NUM_LEDS); led+=(2*COG_SIZE))
+  {
+    setPixel(led, color.color);
+  }
+}
+
+/* Move the cogs up one pixel */
+void moveCogsUp(rgbColor color1, rgbColor color2)
+{
+  cogOffset = (cogOffset + 1) % (2 * COG_SIZE);
+  // Since we are moving cogs up, we increase our offset by one COG_SIZE
+  // so that we add to the tail of the cog, rather than overwriting the
+  // beginning
+  uint8_t tempCogOffset = (cogOffset + COG_SIZE - 1) % (2 * COG_SIZE);
+  if (tempCogOffset < COG_SIZE)
+  {
+    setFromOffset(tempCogOffset, color1);
+    setFromOffset(tempCogOffset + COG_SIZE, color2);
+  }
+  else
+  {
+    setFromOffset(tempCogOffset, color1);
+    setFromOffset(tempCogOffset - COG_SIZE, color2);
+  }
+}
+
+/* Move the cogs down one pixel */
+void moveCogsDown(rgbColor color1, rgbColor color2)
+{
+  // Shift the cogOffset down by one, but if it's zero then set it to
+  // the last pixel in the first cog "cycle"
+  if (cogOffset-- == 0)
+  {
+    cogOffset = (2 * COG_SIZE) - 1;
+  }
+  if (cogOffset < COG_SIZE)
+  {
+    setFromOffset(cogOffset, color1);
+    setFromOffset(cogOffset + COG_SIZE, color2);
+  }
+  else
+  {
+    setFromOffset(cogOffset, color1);
+    setFromOffset(cogOffset - COG_SIZE, color2);
+  }
+}
+
+/* Show a bunch of cycles of upward rotation of the cogs */
+void rotatingCogsUp(rgbColor colorOne, rgbColor colorTwo)
+{
+  for (int i = 0; i < (8 * COG_SIZE); i++) {
+    moveCogsUp(colorOne, colorTwo);
+    showPixels();
+    _delay(100);
+  }
+}
+
+/* Show a bunch of cycles of downward rotation of the cogs */
+void rotatingCogsDown(rgbColor colorOne, rgbColor colorTwo)
+{
+  for (int i = 0; i < (8 * COG_SIZE); i++) {
+    moveCogsDown(colorOne, colorTwo);
+    showPixels();
+    _delay(100);
+  }
+}
+
+/* Show the Spartronics Blue and Yellow cogs! */
+void cogs(rgbColor color1, rgbColor color2)
+{
+  cogs_init(color1, color2);
+  while (1) {
+    rotatingCogsUp(color1, color2);
+    rotatingCogsDown(color1, color2);
+  }
+}

@@ -197,7 +197,7 @@ void loop()
       solidWithBrightness(rgbColor_ORANGE.color, 255);
       break;
     case INTAKE_UP:
-      cogs_init(rgbColor_BLUE.color, rgbColor_YELLOW.color);
+      cogs(rgbColor_BLUE.color, rgbColor_YELLOW.color);
       break;
     case INTAKE_DOWN:
       crawler(10, rgbColor_RED.color, 30);

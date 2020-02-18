@@ -119,25 +119,3 @@ void spartronics_fade(unsigned long timeInterval, uint32_t color1, uint32_t colo
   }
 }
 
-
-
-
-// Number of LEDs per "cog" on the animation
-#define COG_SIZE 5
-
-// A counter from 0 to (2*COG_SIZE)-1
-uint8_t cogOffset=0;
-
-// Classic Spartronics Cogs
-void cogs_init(uint32_t color1, uint32_t color2)
-{
-  for (uint8_t i = 0; i < NUM_LEDS; i++) {
-    if ((((uint8_t) (i / COG_SIZE)) & 1) == 0) {
-      pixels.setPixelColor(i, color1);
-    }
-    else {
-      pixels.setPixelColor(i, color2);
-    }
-  }
-  pixels.show();
-}
