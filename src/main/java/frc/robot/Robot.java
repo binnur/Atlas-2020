@@ -84,6 +84,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    LED.getInstance().setBlingState(BlingState.DISABLED);
     m_autonomousCommand = null;
     Logger.notice("Autonomous disabled");
   }
@@ -93,13 +94,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    LED.getInstance().setBlingState(BlingState.OFF);
     Logger.notice("autonomousPeriodic: Autonomous disabled");
   }
 
   @Override
   public void teleopInit() {
     // stop any autonomous commands
-    System.out.println("TeleopInit");
+    Logger.notice("@ teleopInit...");
     if (m_autonomousCommand != null) {
       Logger.error("Error: there shouldn't be an autonomous command!");
       m_autonomousCommand.cancel();
@@ -107,7 +109,7 @@ public class Robot extends TimedRobot {
     }
 
     Logger.notice("@ teleopInit: Requested BlingState.INTAKE_UP");
-    m_robotContainer.setBlingState(BlingState.INTAKE_UP);
+    LED.getInstance().setBlingState(BlingState.INTAKE_UP);
 
     // FIXME what is the need to update from smartdashboard?
     // update subsystem defaults from the network tables as needed
@@ -126,8 +128,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    Logger.notice("@ testInit: Requested BlingState.LAUNCH");
+    LED.getInstance().setBlingState(BlingState.LAUNCH);
     // Cancels all running commands at the start of test mode.
-    System.out.println("TeleopInit");
     CommandScheduler.getInstance().cancelAll();
   }
 
