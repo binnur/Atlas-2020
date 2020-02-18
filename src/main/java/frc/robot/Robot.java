@@ -34,7 +34,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
+    System.out.println("In robotInit");
     m_robotContainer = new RobotContainer();
+
+    // print out available serial ports for information
+    LED.getInstance().enumerateAvailablePorts();
   }
 
   /**
@@ -65,6 +69,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    System.out.println("In disabledInit");
     Logger.notice("@disabledInit: Requested BlingState.DISABLED");
     LED.getInstance().setBlingState(BlingState.DISABLED);
   }
@@ -94,6 +99,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     // stop any autonomous commands
+    System.out.println("TeleopInit");
     if (m_autonomousCommand != null) {
       Logger.error("Error: there shouldn't be an autonomous command!");
       m_autonomousCommand.cancel();
@@ -121,6 +127,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
+    System.out.println("TeleopInit");
     CommandScheduler.getInstance().cancelAll();
   }
 
