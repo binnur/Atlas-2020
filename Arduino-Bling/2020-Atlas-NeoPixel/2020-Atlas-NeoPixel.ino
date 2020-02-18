@@ -25,7 +25,7 @@
 
 // Configuration for our LED strip and Arduino
 // TODO: Update PIN and NUM_LEDS for development and later robot deployment
-#define NUM_LEDS 15
+#define NUM_LEDS 150
 #define PIN 11
 
 // Allocate our pixel memory, set interface to match our hardware
@@ -191,10 +191,10 @@ void loop()
    {
     // Bling effects
     case OFF:
-      solid(rgbColor_OFF.color, 255);
+      solidWithBrightness(rgbColor_OFF.color, 255);
       break;
     case DISABLED:
-      solid(rgbColor_ORANGE.color, 255);
+      solidWithBrightness(rgbColor_ORANGE.color, 255);
       break;
     case INTAKE_UP:
       cogs_init(rgbColor_BLUE.color, rgbColor_YELLOW.color);
@@ -207,6 +207,6 @@ void loop()
       currentCommand = OFF;
       break;
     default:
-      solid(rgbColor_YELLOW.color, 128);
+      solidWithBrightness(rgbColor_YELLOW.color, 128);
   }
 }
